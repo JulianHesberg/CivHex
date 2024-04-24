@@ -1,4 +1,4 @@
-namespace DefaultNamespace;
+namespace backend.Models;
 
 public enum TileType
 {

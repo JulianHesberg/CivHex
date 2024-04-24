@@ -1,8 +1,7 @@
-namespace DefaultNamespace;
+namespace backend.Models;
 
 public enum TileStatus
 {
-    Player1,
-    Player2,
+    Owned,
     Unowned
 }
