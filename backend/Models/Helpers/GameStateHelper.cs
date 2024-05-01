@@ -30,15 +30,18 @@ public static class GameStateHelper
         int startingGold = 10;
         List<List<HexTile>> hexList = new List<List<HexTile>>();
 
-        for (int i = 0; i < 6; i++)
+        foreach (var row in tileTypes)
         {
-            hexList.Add(new List<HexTile>()); // Initialize inner list
+            var hexRow = new List<HexTile>();
 
-            for (int j = 0; j < 6; j++)
+            foreach (var tileType in row)
             {
-                hexList[i].Add(new HexTile(tileTypes[i][j], TileStatus.Unowned, numbers[i][j])); // Add new HexTile to the inner list
+                hexRow.Add(new HexTile(tileType, TileStatus.Unowned, numbers[hexList.Count][hexRow.Count]));
             }
+
+            hexList.Add(hexRow);
         }
+
         
         List<Player> players = new List<Player>
         {
