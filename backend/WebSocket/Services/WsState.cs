@@ -1,4 +1,6 @@
-﻿using Fleck;
+﻿using api.Models.Helpers;
+using backend.Models.states;
+using Fleck;
 
 namespace backend.WebSocket.State;
 
@@ -10,7 +12,7 @@ public class WsState
     public static Dictionary<Guid, Guid> PlayersRooms = new();
 
     //Change string to GameState after testing.
-    public static Dictionary<Guid, string> RoomsState = new();
+    public static Dictionary<Guid, GameState> RoomsState = new();
     
 
     public static bool AddConnection(IWebSocketConnection ws)
@@ -40,10 +42,10 @@ public class WsState
 
     public static void AddPlayersToRooms(IWebSocketConnection ws1, IWebSocketConnection ws2)
     {
-        var gameState = "New State!!";
         var roomId = Guid.NewGuid();
-
-        RoomsState.TryAdd(roomId, gameState);
+        GameState state = GameStateHelper.NewGame(roomId, ws1.ConnectionInfo.Id, ws2.ConnectionInfo.Id);
+        
+        RoomsState.TryAdd(roomId, state);
         PlayersRooms.TryAdd(ws1.ConnectionInfo.Id, roomId);
         PlayersRooms.TryAdd( ws2.ConnectionInfo.Id, roomId);
         
@@ -52,22 +54,8 @@ public class WsState
         {
             if (roomId == id.Value)
             {
-                Connections[id.Key].Send(gameState);
+                Connections[id.Key].Send(state.Serialize());
             }
         }
     }
-    /**
-    public static void BroadcastToRoom(int room, string message)
-    {
-        if (Rooms.TryGetValue(room, out var guids))
-        {
-            foreach (var guid in guids)
-            {
-                if (Connections.TryGetValue(guid, out var ws))
-                    ws.Connection.Send(message);
-
-            }
-        }
-    }
-    **/
 }

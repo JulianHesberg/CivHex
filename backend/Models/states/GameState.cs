@@ -1,20 +1,34 @@
+using System.Text.Json;
+
 namespace backend.Models.states;
 
 public class GameState
 {
-    public List<Player> Players { get; set; }
-    public List<HexTile> HexTiles { get; set; }
+    #region Properties
+
+    public Guid RoomId { get; set; }
+    public List<Player> PlayersList { get; set; }
+    public List<List<HexTile>> HexTilesList { get; set; }
     public int TurnNumber { get; set; }
 
+    #endregion
+
+    
     public string Serialize()
     {
-        //TODO
-        return null;
+        return JsonSerializer.Serialize(this);
     }
 
-    public static GameState Deserialize(string data)
+    public GameState Deserialize(string data)
     {
-        //TODO
-        return null;
+       return JsonSerializer.Deserialize<GameState>(data)!;
+    }
+
+    public GameState(List<Player> playersList, List<List<HexTile>> hexTilesList, int turnNumber, Guid roomId)
+    {
+        PlayersList = playersList;
+        HexTilesList = hexTilesList;
+        TurnNumber = turnNumber;
+        RoomId = roomId;
     }
 }
