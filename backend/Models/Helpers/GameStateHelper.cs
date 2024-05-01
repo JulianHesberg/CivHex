@@ -26,8 +26,7 @@ public static class GameStateHelper
             new List<TileType> {TileType.Stone, TileType.Wood, TileType.Grain, TileType.Grain, TileType.Stone, TileType.Grain},
             new List<TileType> {TileType.Grain, TileType.Wood, TileType.Sheep, TileType.Sheep, TileType.Wood, TileType.Sheep}
         };
-
-        List<Player> players = new List<Player>();
+        
         int startingGold = 10;
         List<List<HexTile>> hexList = new List<List<HexTile>>();
 
@@ -40,12 +39,12 @@ public static class GameStateHelper
                 hexList[i].Add(new HexTile(tileTypes[i][j], TileStatus.Unowned, numbers[i][j])); // Add new HexTile to the inner list
             }
         }
-
-        Player player1 = new Player("player1", startingGold, ws1Id);
-        Player player2 = new Player("player2", startingGold, ws2Id);
         
-        players.Add(player1);
-        players.Add(player2);
+        List<Player> players = new List<Player>
+        {
+            new Player("player1", startingGold, ws1Id),
+            new Player("player2", startingGold, ws2Id)
+        };
 
 
         GameState state = new GameState(players, hexList, 1, roomId);
