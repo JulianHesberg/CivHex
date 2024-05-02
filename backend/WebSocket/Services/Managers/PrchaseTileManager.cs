@@ -1,9 +1,10 @@
 ﻿using api.Models.Logic;
-using backend.WebSocket.State;
+using backend.Models;
+using backend.Models.states;
 
-namespace backend.Models.states.StateHelper;
+namespace backend.WebSocket.Services.Managers;
 
-public class PurchaseTileHelper
+public static class PurchaseTileManager
 {
     public static void PurchaseTile (Guid roomId, Guid playerId, int rowIndex, int columnIndex)
     {
