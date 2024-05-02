@@ -48,8 +48,14 @@ public static class GameStateHelper
             new Player("player1", startingGold, ws1Id),
             new Player("player2", startingGold, ws2Id)
         };
-
-
+        
+        //Remove later, testing purchase of tiles
+        hexList[0][1].Owner = players[0];
+        hexList[0][1].GetTileStatus = TileStatus.Owned;
+        
+        hexList[5][4].Owner = players[1];
+        hexList[5][4].GetTileStatus = TileStatus.Owned;
+        
         GameState state = new GameState(players, hexList, 1, roomId);
 
         return state;
