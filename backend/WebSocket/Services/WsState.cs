@@ -2,6 +2,7 @@
 using api.Models.Logic;
 using backend.Models;
 using backend.Models.states;
+using backend.Models.states.StateHelper;
 using Fleck;
 
 namespace backend.WebSocket.State;
@@ -63,42 +64,6 @@ public class WsState
 
     public static void PurchaseTile(Guid roomId, Guid playerId, int rowIndex, int columnIndex)
     {
-        GameState gameState = null;
-        Player owner = null;
-        foreach (var room in RoomsState )
-        {
-            if (room.Key == roomId)
-            {
-                gameState = room.Value;
-            }
-        }
-
-        foreach (var player in gameState.PlayersList)
-        {
-            if (player.WsId == playerId)
-            {
-                owner = player;
-            }
-        }
-        TileStatusChecker checker = new TileStatusChecker();
-
-        if (checker.IsTilePurchasable(gameState.HexTilesList, owner, rowIndex, columnIndex))
-        {
-            gameState.HexTilesList[rowIndex][columnIndex].Owner = owner;
-            gameState.HexTilesList[rowIndex][columnIndex].GetTileStatus = TileStatus.Owned;
-            
-        }
-
-        if (RoomsState.ContainsKey(roomId))
-        {
-            RoomsState[roomId] = gameState;
-        }
-        foreach (var connection in PlayersRooms)
-        {
-            if (connection.Value == roomId)
-            {
-                Connections[connection.Key].Send(gameState.Serialize());
-            }
-        }
+        PurchaseTileHelper.PurchaseTile(roomId, playerId, rowIndex, columnIndex);
     }
 }
