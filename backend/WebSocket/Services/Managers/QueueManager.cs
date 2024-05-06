@@ -32,7 +32,7 @@ public class QueueManager
     private static void AddPlayersToRooms(IWebSocketConnection ws1, IWebSocketConnection ws2)
     {
         var roomId = Guid.NewGuid();
-        GameState state = GameStateHelper.NewGame(roomId, ws1.ConnectionInfo.Id, ws2.ConnectionInfo.Id);
+        GameState state = GameStateHelper.Turn7Game(roomId, ws1.ConnectionInfo.Id, ws2.ConnectionInfo.Id);
         
         WsState.RoomsState.TryAdd(roomId, state);
         WsState.PlayersRooms.TryAdd(ws1.ConnectionInfo.Id, roomId);

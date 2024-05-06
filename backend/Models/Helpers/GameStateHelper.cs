@@ -49,15 +49,38 @@ public static class GameStateHelper
             new Player("player2", startingGold, ws2Id)
         };
         
-        //Remove later, testing purchase of tiles
-        hexList[0][1].Owner = players[0];
-        hexList[0][1].GetTileStatus = TileStatus.Owned;
-        
-        hexList[5][4].Owner = players[1];
-        hexList[5][4].GetTileStatus = TileStatus.Owned;
-        
         GameState state = new GameState(players, hexList, 1, roomId);
 
         return state;
+    }
+
+    public static GameState Turn7Game(Guid roomId, Guid ws1Id, Guid ws2Id)
+    {
+        var gameState = NewGame(roomId, ws1Id, ws2Id);
+
+        //Give player1 3 tiles in the top left
+        gameState.HexTilesList[0][0].GetTileStatus = TileStatus.Owned;
+        gameState.HexTilesList[0][0].Owner = gameState.PlayersList[0];
+        
+        gameState.HexTilesList[0][1].GetTileStatus = TileStatus.Owned;
+        gameState.HexTilesList[0][1].Owner = gameState.PlayersList[0];
+        
+        gameState.HexTilesList[1][0].GetTileStatus = TileStatus.Owned;
+        gameState.HexTilesList[1][0].Owner = gameState.PlayersList[0];
+        
+        //Give player2 3 tiles in the bottom right
+        gameState.HexTilesList[5][5].GetTileStatus = TileStatus.Owned;
+        gameState.HexTilesList[5][5].Owner = gameState.PlayersList[1];
+        
+        gameState.HexTilesList[5][4].GetTileStatus = TileStatus.Owned;
+        gameState.HexTilesList[5][4].Owner = gameState.PlayersList[1];
+        
+        gameState.HexTilesList[4][5].GetTileStatus = TileStatus.Owned;
+        gameState.HexTilesList[4][5].Owner = gameState.PlayersList[1];
+
+        //Turn 7 means it's player1's turn
+        gameState.TurnNumber = 7;
+
+        return gameState;
     }
 }

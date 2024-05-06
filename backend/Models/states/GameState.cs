@@ -5,12 +5,11 @@ namespace backend.Models.states;
 public class GameState
 {
     #region Properties
-
+    public int TurnNumber { get; set; }
     public Guid RoomId { get; set; }
     public List<Player> PlayersList { get; set; }
     public List<List<HexTile>> HexTilesList { get; set; }
-    public int TurnNumber { get; set; }
-
+    
     #endregion
 
     

@@ -24,15 +24,14 @@ public class WsState
     {
         QueueManager.AddToQueue(ws, Queue);
     }
-    
-
-    public static void AddPlayersToRooms(IWebSocketConnection ws1, IWebSocketConnection ws2)
-    {
-
-    }
 
     public static void PurchaseTile(Guid roomId, Guid playerId, int rowIndex, int columnIndex)
     {
         PurchaseTileManager.PurchaseTile(roomId, playerId, rowIndex, columnIndex);
+    }
+
+    public static void EndTurn(Guid playerId, Guid roomId)
+    {
+        TurnManager.EndTurn(playerId, roomId);
     }
 }

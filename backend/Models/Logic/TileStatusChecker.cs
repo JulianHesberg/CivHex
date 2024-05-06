@@ -10,6 +10,7 @@ public class TileStatusChecker
         {
             return false;
         }
+        
 
         List<List<int>> neighbors = new List<List<int>>
         {
@@ -33,7 +34,15 @@ public class TileStatusChecker
 
         return false;
     }
-    
 
+    public bool IsTileOwned(HexTile tile)
+    {
+        if (tile.GetTileStatus == TileStatus.Owned)
+        {
+            return true;
+        }
+
+        return false;
+    }
 
 }
