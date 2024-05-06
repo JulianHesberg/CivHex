@@ -1,0 +1,5 @@
+enum TileStatus
+{
+  owned,
+  unowned
+}

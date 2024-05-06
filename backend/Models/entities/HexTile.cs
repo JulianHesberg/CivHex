@@ -6,11 +6,12 @@ public class HexTile
 
         public TileType GetTileType { get; set; }
     
-        public TileStatus GetTileStatus { get; set; }
+    public TileStatus GetTileStatus { get; set; }
         
-        public int TileNumber { get; set; }
+    public int TileNumber { get; set; }
         
-        public Player? Owner { get; set; }
+    public Player? Owner { get; set; }
+    
 
     #endregion
     
