@@ -4,7 +4,7 @@ public class HexTile
 {
     #region properties
 
-    public TileType GetTileType { get; set; }
+        public TileType GetTileType { get; set; }
     
     public TileStatus GetTileStatus { get; set; }
         
