@@ -1,44 +1,60 @@
-var builder = WebApplication.CreateBuilder(args);
+using System.Reflection;
+using api;
+using backend.WebSocket.Services;
+using backend.WebSocket.State;
+using Fleck;
+using lib;
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
-app.UseHttpsRedirection();
-
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast")
-.WithOpenApi();
-
+var app = await ApiStartUp.StartApi();
+app.UseSwagger();
+app.UseSwaggerUI();
+app.MapControllers();
 app.Run();
 
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
+namespace api
 {
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+    public static class ApiStartUp
+    {
+        public static async Task<WebApplication> StartApi()
+        { 
+            var builder = WebApplication.CreateBuilder();
+            builder.Services.AddSingleton<ClientConnections>();
+            builder.Services.AddControllers();
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen();
+            var services =  builder.FindAndInjectClientEventHandlers(Assembly.GetExecutingAssembly());
+
+            var app = builder.Build();
+            
+            var server = new WebSocketServer("ws://0.0.0.0:8888");
+            
+            server.Start(socket =>
+            {
+                socket.OnOpen = () =>
+                {
+                    WsState.AddConnection(socket);
+                    socket.Send("Welcome to the server, a friendly gaming space.");
+                };
+                socket.OnClose = () =>
+                {
+                    app.Services.GetService<ClientConnections>().RemoveConnectionFromPool(socket);
+                };
+                socket.OnMessage = async message =>
+                {
+                    try
+                    {
+                        await app.InvokeClientEventHandler(services, socket, message);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+                        Console.WriteLine(e.InnerException);
+                        Console.WriteLine(e.Message);
+                    }
+                };
+            });
+            return app;
+        }
+    }
+    
 }
